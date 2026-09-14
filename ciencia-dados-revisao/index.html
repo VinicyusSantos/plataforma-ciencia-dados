@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revisão de Ciência de Dados</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-kicker">Ciência de Dados</span>
+        <h1>Revisão</h1>
+        <p>Prática contínua por capítulos.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Capítulos">
+        <p class="nav-label">Capítulos</p>
+        <div id="chapterList"></div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow" id="chapterEyebrow">Capítulo 01</p>
+          <h2 id="chapterTitle">Fundamentos de Python</h2>
+          <p id="chapterDescription" class="chapter-description"></p>
+        </div>
+        <button id="resetButton" class="secondary-button" type="button">Reiniciar capítulo</button>
+      </section>
+
+      <section class="stats-grid" aria-label="Progresso">
+        <article class="stat-card">
+          <span>Progresso</span>
+          <strong id="progressText">0/30</strong>
+        </article>
+        <article class="stat-card">
+          <span>Acertos</span>
+          <strong id="correctText">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Erros</span>
+          <strong id="wrongText">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Aproveitamento</span>
+          <strong id="accuracyText">0%</strong>
+        </article>
+      </section>
+
+      <div class="progress-track" aria-hidden="true">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <section id="quizCard" class="quiz-card">
+        <div class="question-meta">
+          <span id="questionNumber" class="question-number">Questão 1 de 30</span>
+          <span id="questionType" class="type-badge">Alternativa correta</span>
+          <span id="questionTopic" class="topic-badge">Variáveis</span>
+        </div>
+
+        <h3 id="questionPrompt" class="question-prompt"></h3>
+        <pre id="codeBlock" class="code-block" hidden><code id="codeText"></code></pre>
+
+        <form id="optionsForm" class="options-list"></form>
+
+        <div id="feedback" class="feedback" hidden>
+          <strong id="feedbackTitle"></strong>
+          <p id="feedbackText"></p>
+        </div>
+
+        <div class="actions">
+          <button id="answerButton" class="primary-button" type="button">Responder</button>
+          <button id="nextButton" class="secondary-button" type="button" hidden>Próxima questão</button>
+        </div>
+      </section>
+
+      <section id="completionCard" class="completion-card" hidden>
+        <p class="eyebrow">Capítulo concluído</p>
+        <h3>Fundamentos de Python finalizado.</h3>
+        <p id="completionSummary"></p>
+        <button id="restartCompletionButton" class="primary-button" type="button">Refazer capítulo</button>
+      </section>
+    </main>
+  </div>
+
+  <script src="chapters/fundamentos-python.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
