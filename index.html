@@ -15,8 +15,8 @@
         <p>Prática contínua por capítulos.</p>
       </div>
 
-      <nav class="chapter-nav" aria-label="Capítulos">
-        <p class="nav-label">Capítulos</p>
+      <nav class="chapter-nav" aria-label="Conteúdos">
+        <p class="nav-label">Conteúdos</p>
         <div id="chapterList"></div>
       </nav>
     </aside>
@@ -29,6 +29,24 @@
           <p id="chapterDescription" class="chapter-description"></p>
         </div>
         <button id="resetButton" class="secondary-button" type="button">Reiniciar capítulo</button>
+      </section>
+
+      <section id="materialCard" class="material-card" hidden>
+        <div class="material-header">
+          <div>
+            <p class="eyebrow">Material do projeto</p>
+            <h3 id="materialTitle"></h3>
+            <p id="materialDescription"></p>
+          </div>
+          <a id="materialLink" class="secondary-button material-link" href="#" target="_blank" rel="noopener">Abrir PDF</a>
+        </div>
+        <details id="materialDetails" class="material-details">
+          <summary>Ler dentro da plataforma</summary>
+          <div class="pdf-frame-wrapper">
+            <iframe id="materialFrame" title="Material do projeto em PDF" loading="lazy"></iframe>
+          </div>
+          <p class="material-mobile-note">Se o PDF não abrir dentro do navegador do telefone, use o botão “Abrir PDF”.</p>
+        </details>
       </section>
 
       <section class="stats-grid" aria-label="Progresso">
@@ -69,6 +87,7 @@
         <div id="feedback" class="feedback" hidden>
           <strong id="feedbackTitle"></strong>
           <p id="feedbackText"></p>
+          <p id="feedbackReference" class="feedback-reference" hidden></p>
         </div>
 
         <div class="actions">
@@ -78,7 +97,7 @@
       </section>
 
       <section id="completionCard" class="completion-card" hidden>
-        <p class="eyebrow">Capítulo concluído</p>
+        <p id="completionEyebrow" class="eyebrow">Capítulo concluído</p>
         <h3>Fundamentos de Python finalizado.</h3>
         <p id="completionSummary"></p>
         <button id="restartCompletionButton" class="primary-button" type="button">Refazer capítulo</button>
@@ -90,6 +109,7 @@
   <script src="chapters/python-intermediario.js"></script>
   <script src="chapters/orientacao-objetos.js"></script>
   <script src="chapters/python-avancado.js"></script>
+  <script src="chapters/projeto-gridload.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

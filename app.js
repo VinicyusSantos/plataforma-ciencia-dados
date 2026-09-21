@@ -12,6 +12,12 @@ const els = {
   chapterEyebrow: document.getElementById("chapterEyebrow"),
   chapterTitle: document.getElementById("chapterTitle"),
   chapterDescription: document.getElementById("chapterDescription"),
+  materialCard: document.getElementById("materialCard"),
+  materialTitle: document.getElementById("materialTitle"),
+  materialDescription: document.getElementById("materialDescription"),
+  materialLink: document.getElementById("materialLink"),
+  materialFrame: document.getElementById("materialFrame"),
+  materialDetails: document.getElementById("materialDetails"),
   resetButton: document.getElementById("resetButton"),
   progressText: document.getElementById("progressText"),
   correctText: document.getElementById("correctText"),
@@ -31,6 +37,8 @@ const els = {
   feedback: document.getElementById("feedback"),
   feedbackTitle: document.getElementById("feedbackTitle"),
   feedbackText: document.getElementById("feedbackText"),
+  feedbackReference: document.getElementById("feedbackReference"),
+  completionEyebrow: document.getElementById("completionEyebrow"),
   answerButton: document.getElementById("answerButton"),
   nextButton: document.getElementById("nextButton"),
   restartCompletionButton: document.getElementById("restartCompletionButton")
@@ -94,9 +102,12 @@ function selectChapter(index) {
 function renderChapter() {
   const chapter = currentChapter();
 
-  els.chapterEyebrow.textContent = `Capítulo ${chapter.number}`;
+  const sectionLabel = chapter.sectionLabel || "Capítulo";
+  els.chapterEyebrow.textContent = `${sectionLabel} ${chapter.number}`;
   els.chapterTitle.textContent = chapter.title;
   els.chapterDescription.textContent = chapter.description;
+  els.resetButton.textContent = `Reiniciar ${sectionLabel.toLowerCase()}`;
+  renderMaterial(chapter);
 
   if (state.questionIndex >= chapter.questions.length) {
     renderCompletion();
@@ -107,6 +118,27 @@ function renderChapter() {
   els.completionCard.hidden = true;
   renderQuestion();
   updateStats();
+}
+
+
+function renderMaterial(chapter) {
+  const material = chapter.material;
+
+  if (!material) {
+    els.materialCard.hidden = true;
+    els.materialTitle.textContent = "";
+    els.materialDescription.textContent = "";
+    els.materialLink.removeAttribute("href");
+    els.materialFrame.removeAttribute("src");
+    els.materialDetails.open = false;
+    return;
+  }
+
+  els.materialCard.hidden = false;
+  els.materialTitle.textContent = material.title;
+  els.materialDescription.textContent = material.description || "";
+  els.materialLink.href = material.path;
+  els.materialFrame.src = material.path;
 }
 
 function renderQuestion() {
@@ -149,6 +181,8 @@ function renderQuestion() {
   els.feedback.className = "feedback";
   els.feedbackTitle.textContent = "";
   els.feedbackText.textContent = "";
+  els.feedbackReference.textContent = "";
+  els.feedbackReference.hidden = true;
   els.answerButton.hidden = false;
   els.answerButton.disabled = false;
   els.nextButton.hidden = true;
@@ -194,6 +228,13 @@ function submitAnswer() {
   els.feedback.className = `feedback ${isCorrect ? "success" : "error"}`;
   els.feedbackTitle.textContent = isCorrect ? "Resposta correta." : `Resposta incorreta. Correta: ${question.options[question.answer]}`;
   els.feedbackText.textContent = question.explanation;
+  if (question.reference) {
+    els.feedbackReference.textContent = `No material: ${question.reference}`;
+    els.feedbackReference.hidden = false;
+  } else {
+    els.feedbackReference.textContent = "";
+    els.feedbackReference.hidden = true;
+  }
 
   els.answerButton.hidden = true;
   els.nextButton.hidden = false;
@@ -238,6 +279,8 @@ function renderCompletion() {
 
   els.quizCard.hidden = true;
   els.completionCard.hidden = false;
+  const sectionLabel = chapter.sectionLabel || "Capítulo";
+  els.completionEyebrow.textContent = `${sectionLabel} concluído`;
   els.completionCard.querySelector("h3").textContent = `${chapter.title} finalizado.`;
   els.completionSummary.textContent = `Você acertou ${correct} de ${total} questões (${accuracy}% de aproveitamento). Você pode reiniciar o capítulo para revisar novamente.`;
 
