@@ -18,6 +18,10 @@ const els = {
   materialLink: document.getElementById("materialLink"),
   materialFrame: document.getElementById("materialFrame"),
   materialDetails: document.getElementById("materialDetails"),
+  contentCard: document.getElementById("contentCard"),
+  contentContainer: document.getElementById("contentContainer"),
+  statsGrid: document.querySelector(".stats-grid"),
+  progressTrack: document.querySelector(".progress-track"),
   resetButton: document.getElementById("resetButton"),
   progressText: document.getElementById("progressText"),
   correctText: document.getElementById("correctText"),
@@ -85,7 +89,9 @@ function renderChapterNav() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `chapter-button${index === state.chapterIndex ? " active" : ""}`;
-    button.innerHTML = `<strong>${chapter.number}. ${chapter.title}</strong><small>${chapter.questions.length} questões</small>`;
+    const navTitle = chapter.navLabel || `${chapter.number}. ${chapter.title}`;
+    const navMeta = chapter.navMeta || `${chapter.questions.length} questões`;
+    button.innerHTML = `<strong>${navTitle}</strong><small>${navMeta}</small>`;
     button.addEventListener("click", () => selectChapter(index));
     els.chapterList.appendChild(button);
   });
@@ -94,7 +100,13 @@ function renderChapterNav() {
 function selectChapter(index) {
   state.chapterIndex = index;
   state.locked = false;
-  loadProgress(currentChapter());
+  const chapter = currentChapter();
+  if (chapter.kind === "content") {
+    state.questionIndex = 0;
+    state.answers = [];
+  } else {
+    loadProgress(chapter);
+  }
   renderChapterNav();
   renderChapter();
 }
@@ -109,6 +121,16 @@ function renderChapter() {
   els.resetButton.textContent = `Reiniciar ${sectionLabel.toLowerCase()}`;
   renderMaterial(chapter);
 
+  if (chapter.kind === "content") {
+    renderContentChapter(chapter);
+    return;
+  }
+
+  els.contentCard.hidden = true;
+  els.statsGrid.hidden = false;
+  els.progressTrack.hidden = false;
+  els.resetButton.hidden = false;
+
   if (state.questionIndex >= chapter.questions.length) {
     renderCompletion();
     return;
@@ -118,6 +140,17 @@ function renderChapter() {
   els.completionCard.hidden = true;
   renderQuestion();
   updateStats();
+}
+
+
+function renderContentChapter(chapter) {
+  els.contentCard.hidden = false;
+  els.contentContainer.innerHTML = chapter.contentHtml || "";
+  els.statsGrid.hidden = true;
+  els.progressTrack.hidden = true;
+  els.resetButton.hidden = true;
+  els.quizCard.hidden = true;
+  els.completionCard.hidden = true;
 }
 
 
@@ -304,7 +337,9 @@ els.restartCompletionButton.addEventListener("click", resetChapter);
 if (chapters.length === 0) {
   document.body.innerHTML = "<p>Nenhum capítulo carregado.</p>";
 } else {
-  loadProgress(currentChapter());
+  if (currentChapter().kind !== "content") {
+    loadProgress(currentChapter());
+  }
   renderChapterNav();
   renderChapter();
 }
