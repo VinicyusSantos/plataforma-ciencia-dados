@@ -18,6 +18,7 @@ const els = {
   materialLink: document.getElementById("materialLink"),
   materialFrame: document.getElementById("materialFrame"),
   materialDetails: document.getElementById("materialDetails"),
+  additionalMaterials: document.getElementById("additionalMaterials"),
   contentCard: document.getElementById("contentCard"),
   contentContainer: document.getElementById("contentContainer"),
   statsGrid: document.querySelector(".stats-grid"),
@@ -154,8 +155,65 @@ function renderContentChapter(chapter) {
 }
 
 
+function createAdditionalMaterialCard(material) {
+  const section = document.createElement("section");
+  section.className = "material-card";
+
+  const header = document.createElement("div");
+  header.className = "material-header";
+
+  const textWrapper = document.createElement("div");
+  const eyebrow = document.createElement("p");
+  eyebrow.className = "eyebrow";
+  eyebrow.textContent = "Material do projeto";
+
+  const title = document.createElement("h3");
+  title.textContent = material.title;
+
+  const description = document.createElement("p");
+  description.textContent = material.description || "";
+
+  textWrapper.append(eyebrow, title, description);
+
+  const link = document.createElement("a");
+  link.className = "secondary-button material-link";
+  link.href = material.path;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = "Abrir PDF";
+
+  header.append(textWrapper, link);
+
+  const details = document.createElement("details");
+  details.className = "material-details";
+
+  const summary = document.createElement("summary");
+  summary.textContent = "Ler dentro da plataforma";
+
+  const frameWrapper = document.createElement("div");
+  frameWrapper.className = "pdf-frame-wrapper";
+
+  const frame = document.createElement("iframe");
+  frame.title = `${material.title} em PDF`;
+  frame.loading = "lazy";
+  frame.src = material.path;
+  frameWrapper.appendChild(frame);
+
+  const note = document.createElement("p");
+  note.className = "material-mobile-note";
+  note.textContent = "Se o PDF não abrir dentro do navegador do telefone, use o botão “Abrir PDF”.";
+
+  details.append(summary, frameWrapper, note);
+  section.append(header, details);
+
+  return section;
+}
+
 function renderMaterial(chapter) {
   const material = chapter.material;
+  const additionalMaterials = Array.isArray(chapter.additionalMaterials) ? chapter.additionalMaterials : [];
+
+  els.additionalMaterials.innerHTML = "";
 
   if (!material) {
     els.materialCard.hidden = true;
@@ -164,14 +222,17 @@ function renderMaterial(chapter) {
     els.materialLink.removeAttribute("href");
     els.materialFrame.removeAttribute("src");
     els.materialDetails.open = false;
-    return;
+  } else {
+    els.materialCard.hidden = false;
+    els.materialTitle.textContent = material.title;
+    els.materialDescription.textContent = material.description || "";
+    els.materialLink.href = material.path;
+    els.materialFrame.src = material.path;
   }
 
-  els.materialCard.hidden = false;
-  els.materialTitle.textContent = material.title;
-  els.materialDescription.textContent = material.description || "";
-  els.materialLink.href = material.path;
-  els.materialFrame.src = material.path;
+  additionalMaterials.forEach(item => {
+    els.additionalMaterials.appendChild(createAdditionalMaterialCard(item));
+  });
 }
 
 function renderQuestion() {
