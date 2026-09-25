@@ -11,6 +11,13 @@ window.CHAPTERS.push({
     "description": "Documento-base do projeto. Use-o para leitura e consulta durante as revisões.",
     "path": "materials/gridload-intelligence-br-escopo-completo.pdf"
   },
+  "additionalMaterials": [
+    {
+      "title": "GridLoad Intelligence BR — Roadmap Completo",
+      "description": "Plano completo de desenvolvimento do projeto, organizado por fases, checkpoints, prioridades e entregáveis.",
+      "path": "materials/gridload-intelligence-br-roadmap-completo.pdf"
+    }
+  ],
   "questions": [
     {
       "type": "Alternativa correta",
